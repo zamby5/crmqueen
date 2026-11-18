@@ -208,7 +208,7 @@ th{font-size:11px;text-transform:uppercase;color:var(--tx2)}
     <div class="card"><h2>WhatsApp</h2>
       <label>Cloud API access token</label><input id="s-wt" type="password" autocomplete="off">
       <label>Phone Number ID</label><input id="s-wp">
-      <label>Graph API sürümü</label><input id="s-wv" placeholder="v21.0">
+      <label>Graph API sürümü</label><input id="s-wv" placeholder="v26.0">
       <label>Proxy URL (opsiyonel, POST {to,text})</label><input id="s-wx" placeholder="https://…workers.dev/wa">
       <label>Gönderici imzası</label><input id="s-sn">
       <button class="b s" onclick="testWA()">Token Test</button></div>
@@ -231,7 +231,7 @@ th{font-size:11px;text-transform:uppercase;color:var(--tx2)}
 <script>
 var KEY='proptech_crm_v3';
 var STAT={yeni:'Yeni',iletisim:'İletişim',randevu:'Randevu',teklif:'Teklif',kapandi:'Kapandı',red:'Reddedildi'};
-var DB={leads:[],tasks:[],fsbo:[],wa:[],camps:[],alarms:[],s:{groqKey:'',groqModel:'openai/gpt-oss-120b',pxUrl:'',pxSecret:'',tavilyKey:'',waToken:'',waPhoneId:'',waVer:'v21.0',waProxy:'',sender:'Murat İyicioğlu – Turyap Queen'}};
+var DB={leads:[],tasks:[],fsbo:[],wa:[],camps:[],alarms:[],s:{groqKey:'',groqModel:'openai/gpt-oss-120b',pxUrl:'',pxSecret:'',tavilyKey:'',waToken:'',waPhoneId:'',waVer:'v26.0',waProxy:'',sender:'Murat İyicioğlu – Turyap Queen'}};
 var lastSearch=null;
 
 function $(i){return document.getElementById(i)}
@@ -384,7 +384,7 @@ async function sendWA(){
   try{
     var r;
     if(s.waProxy){r=await fetch(s.waProxy,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:to,text:t})})}
-    else{r=await fetch('https://graph.facebook.com/'+(s.waVer||'v21.0')+'/'+s.waPhoneId+'/messages',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.waToken},body:JSON.stringify({messaging_product:'whatsapp',to:to,type:'text',text:{body:t}})})}
+    else{r=await fetch('https://graph.facebook.com/'+(s.waVer||'v26.0')+'/'+s.waPhoneId+'/messages',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.waToken},body:JSON.stringify({messaging_product:'whatsapp',to:to,type:'text',text:{body:t}})})}
     var d=await r.json().catch(function(){return{}});
     ok=r.ok;info=ok?'API kabul etti':(r.status===404&&s.waProxy?'Proxy\'de bu uç nokta yok (404): Worker şu an /wa sunmuyor':((d.error&&d.error.message)||'HTTP '+r.status));
   }catch(e){info='Ağ/CORS hatası: '+e.message+' — Proxy URL kullanın veya wa.me ile açın'}
@@ -457,7 +457,7 @@ function delFsbo(id){DB.fsbo=DB.fsbo.filter(function(x){return x.id!==id});save(
 
 /* SETTINGS */
 function fillSettings(){var s=DB.s;$('s-gk').value=s.groqKey;$('s-gm').value=s.groqModel;$('s-tk').value=s.tavilyKey;$('s-wt').value=s.waToken;$('s-wp').value=s.waPhoneId;$('s-wv').value=s.waVer;$('s-wx').value=s.waProxy;$('s-sn').value=s.sender;$('s-px').value=s.pxUrl;$('s-ps').value=s.pxSecret}
-function saveSettings(){var s=DB.s;s.groqKey=val('s-gk');s.groqModel=val('s-gm')||s.groqModel;s.tavilyKey=val('s-tk');s.waToken=val('s-wt');s.waPhoneId=val('s-wp');s.waVer=val('s-wv')||'v21.0';s.waProxy=val('s-wx');s.sender=val('s-sn')||s.sender;s.pxUrl=val('s-px').replace(/\/+$/,'');s.pxSecret=val('s-ps');save();toast('Ayarlar kaydedildi','k')}
+function saveSettings(){var s=DB.s;s.groqKey=val('s-gk');s.groqModel=val('s-gm')||s.groqModel;s.tavilyKey=val('s-tk');s.waToken=val('s-wt');s.waPhoneId=val('s-wp');s.waVer=val('s-wv')||'v26.0';s.waProxy=val('s-wx');s.sender=val('s-sn')||s.sender;s.pxUrl=val('s-px').replace(/\/+$/,'');s.pxSecret=val('s-ps');save();toast('Ayarlar kaydedildi','k')}
 function res(m,ok){$('s-res').innerHTML='<div class="note '+(ok?'':'warn')+'">'+esc(m)+'</div>'}
 async function loadModels(){
   saveSettings();
@@ -469,7 +469,7 @@ async function testGroq(){saveSettings();try{var t=await groq('Yalnızca "ok" ya
 async function testTavily(){saveSettings();try{var r=await tavily('Antalya emlak',1);res('Tavily bağlı, '+r.length+' sonuç döndü.',true)}catch(e){res('Tavily hatası: '+e.message)}}
 async function testWA(){
   saveSettings();var s=DB.s;if(!s.waToken||!s.waPhoneId){res('Token ve Phone Number ID girin.');return}
-  try{var r=await fetch('https://graph.facebook.com/'+(s.waVer||'v21.0')+'/'+s.waPhoneId,{headers:{Authorization:'Bearer '+s.waToken}});var d=await r.json();if(!r.ok)throw new Error((d.error&&d.error.message)||'HTTP '+r.status);res('Token geçerli. Numara: '+(d.display_phone_number||'–'),true)}
+  try{var r=await fetch('https://graph.facebook.com/'+(s.waVer||'v26.0')+'/'+s.waPhoneId,{headers:{Authorization:'Bearer '+s.waToken}});var d=await r.json();if(!r.ok)throw new Error((d.error&&d.error.message)||'HTTP '+r.status);res('Token geçerli. Numara: '+(d.display_phone_number||'–'),true)}
   catch(e){res('WhatsApp hatası: '+e.message+' (CORS ise Proxy URL kullanın)')}
 }
 function exportData(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(Object.assign({},DB,{s:Object.assign({},DB.s,{groqKey:'',tavilyKey:'',waToken:'',pxSecret:''})}),null,2)],{type:'application/json'}));a.download='proptech-crm-'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('Dışa aktarıldı (key\'ler hariç)','k')}
