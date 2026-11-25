@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Proptech CRM | Turyap Queen</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0f172a">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CRM Queen">
+<style>
+:root{--bg:#f5f7fc;--panel:#fff;--bd:#dde3f0;--blue:#2563eb;--green:#059669;--red:#dc2626;--amber:#d97706;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8}
+@media(prefers-color-scheme:dark){:root{--bg:#0f172a;--panel:#1e293b;--bd:#334155;--tx:#f1f5f9;--tx2:#cbd5e1;--tx3:#64748b}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:14px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+header{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--bd);padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header b{font-size:15px}
+.lm{background:var(--blue);color:#fff;width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center}
+.shell{display:flex;align-items:flex-start}
+nav#nav{width:210px;flex-shrink:0;position:sticky;top:53px;height:calc(100vh - 53px);overflow-y:auto;background:var(--panel);border-right:1px solid var(--bd);padding:10px 8px;display:flex;flex-direction:column;gap:2px}
+nav#nav button{display:flex;align-items:center;gap:9px;width:100%;border:0;background:none;color:var(--tx2);padding:8px 11px;border-radius:8px;font:600 13px system-ui,sans-serif;cursor:pointer;text-align:left;position:relative}
+nav#nav button:hover{background:rgba(37,99,235,.08);color:var(--blue)}
+nav#nav button.on{background:rgba(37,99,235,.12);color:var(--blue)}
+nav#nav button.on:before{content:'';position:absolute;left:0;top:25%;height:50%;width:3px;background:var(--blue);border-radius:0 3px 3px 0}
+nav#nav em{font-style:normal;flex:1}
+.nb{font-style:normal;font-size:10px;font-weight:800;background:#fee2e2;color:#991b1b;border-radius:10px;padding:0 6px;display:none}
+.ns{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--tx3);padding:12px 10px 4px}
+@media(max-width:760px){.shell{display:block}nav#nav{position:fixed;bottom:0;left:0;right:0;top:auto;width:auto;height:auto;flex-direction:row;overflow-x:auto;overflow-y:hidden;border-right:0;border-top:1px solid var(--bd);padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px));z-index:6}nav#nav button{flex-direction:column;gap:0;width:auto;min-width:64px;padding:5px 6px;font-size:10px}nav#nav button span{font-size:18px}nav#nav .ns{display:none}nav#nav button.on:before{display:none}nav#nav .nb{position:absolute;top:0;right:8px}main{padding-bottom:90px}#toast{bottom:80px}}
+main{flex:1;min-width:0;max-width:1100px;margin:0 auto;padding:16px}
+.pg{display:none}.pg.on{display:block}
+.card{background:var(--panel);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:14px}
+h2{font-size:18px;margin-bottom:12px}h3{font-size:14px;margin-bottom:8px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.st div{background:var(--panel);border:1px solid var(--bd);border-radius:12px;padding:12px}
+.st b{display:block;font-size:24px;color:var(--blue)}.st span{font-size:11px;color:var(--tx2);text-transform:uppercase}
+label{display:block;font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;margin:8px 0 3px}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+textarea{min-height:90px}
+button.b{border:0;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer;background:var(--blue);color:#fff;margin:8px 6px 0 0}
+button.s{background:var(--bg);color:var(--tx);border:1px solid var(--bd)}button.d{background:var(--red)}button.ok{background:var(--green)}
+button:disabled{opacity:.5;cursor:wait}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px;text-align:left;border-bottom:1px solid var(--bd);vertical-align:top}
+th{font-size:11px;text-transform:uppercase;color:var(--tx2)}
+.tw{overflow-x:auto}
+.sc{display:inline-block;min-width:34px;text-align:center;border-radius:20px;padding:1px 8px;font-weight:700;font-size:12px}
+.hi{background:#d1fae5;color:#065f46}.mi{background:#fef3c7;color:#92400e}.lo{background:#fee2e2;color:#991b1b}
+.note{font-size:12px;color:var(--tx2);background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;margin:8px 0}
+.warn{border-color:var(--amber)}
+.out{white-space:pre-wrap;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:10px;margin-top:8px}
+.src a{color:var(--blue)}
+#toast{position:fixed;right:14px;bottom:14px;display:flex;flex-direction:column;gap:6px;z-index:9}
+#toast div{background:var(--panel);border:1px solid var(--bd);border-left:4px solid var(--blue);border-radius:8px;padding:8px 12px;font-size:13px}
+#toast .e{border-left-color:var(--red)}#toast .k{border-left-color:var(--green)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.em b{font-size:18px}
+</style>
+</head>
+<body>
+<header>
+  <span class="lm">⌂</span><b>Proptech CRM</b><span style="color:var(--tx3);font-size:12px">Turyap Queen · Groq AI</span>
+  <button class="b" id="inst" style="display:none;margin:0 0 0 auto" onclick="installApp()">📲 Uygulamayı Yükle</button>
+</header>
+<div class="shell">
+<nav id="nav"></nav>
+<main>
+
+<section class="pg on" id="p-dash">
+  <div class="card"><h2>Bugün Kimi Aramalı</h2><div id="today"></div>
+    <div class="note">Sıralama yapay zekâ ile değil sabit kuralla yapılır: lead skoru + bekleme (yeni lead için günde 2 puan, en çok 14 gün) + randevu/teklif aşamasında +15 + uyan ilan varsa +10. FSBO ilanlarda yorgunluk puanı ×10 (yalnızca 5 ve üstü). İlan yaşı mal sahibinin yorulduğunu kanıtlamaz, yalnızca ipucudur.</div></div>
+  <div class="card"><h2>Alıcı ↔ İlan Eşleşmeleri</h2><div id="matches"></div>
+    <div class="note">Eşleşme kuralı: lead lokasyonundaki mahalle adı ilan konumunda geçmeli; bütçe girildiyse ilan fiyatı bütçenin %60–110'u arasında olmalı; ikisinde de mülk tipi varsa aynı olmalı. En fazla 3 ilan gösterilir.</div></div>
+  <div class="st" id="stats"></div>
+  <div class="g">
+    <div class="card"><h2>Görevler</h2>
+      <div class="row"><input id="t-title" placeholder="Görev başlığı" style="flex:1"><button class="b" onclick="addTask()">Ekle</button></div>
+      <div id="tasks"></div><button class="b s" onclick="taskAI()">🤖 AI Görev Önerisi</button><div id="task-ai"></div></div>
+    <div class="card"><h2>Bağlantı Durumu</h2><div id="conn"></div>
+      <div class="note">Skorlar yapay zekâ ile değil, aşağıdaki sabit kural tablosuyla hesaplanır. Girilmeyen veri 0 puan alır, tahmin edilmez.</div></div>
+  </div>
+<div class="card"><h2>Lead Hunisi</h2><div id="funnel"></div></div>
+  <div class="card"><div class="row"><h2 style="margin:0">Döviz</h2><span id="dash-fx" style="font-size:13px"></span></div></div>
+  <div class="card"><div class="row"><h2 style="margin:0">Haftalık AI Özeti</h2><button class="b s" style="margin:0" onclick="weeklyAI()">Üret</button></div><div id="weekly"></div><div class="note">Yalnızca CRM'deki sayılar kullanılır; yeni rakam üretilmez.</div></div>
+</section>
+
+<section class="pg" id="p-leads">
+  <div class="g">
+    <div class="card"><h2>Yeni Lead</h2>
+      <label>Ad Soyad *</label><input id="l-name">
+      <label>Telefon *</label><input id="l-phone" placeholder="+90 5xx xxx xx xx">
+      <label>E-posta</label><input id="l-email">
+      <label>Bütçe (₺)</label><input id="l-budget" type="number">
+      <label>Lokasyon</label><input id="l-loc">
+      <label>Mülk tipi</label><select id="l-type"><option>Daire</option><option>Villa</option><option>Residence</option><option>Yazlık</option><option>Arsa</option><option>Ticari</option></select>
+      <label>Amaç</label><select id="l-purpose"><option>Oturum</option><option>Yatırım</option><option>Tatil</option><option>Kira geliri</option></select>
+      <label>Müşteri dövizi</label><select id="l-cur"><option>TRY</option><option>EUR</option><option>USD</option><option>GBP</option><option>RUB</option><option>SAR</option></select><label>Döviz bütçesi (opsiyonel)</label><input id="l-fxb" type="number"><label>Kampanya</label><select id="l-camp"></select><label>Notlar</label><textarea id="l-notes"></textarea>
+      <button class="b" onclick="saveLead()">Kaydet</button></div>
+    <div class="card"><h2>Skor Kuralı (100 puan)</h2>
+      <div class="tw"><table><tr><th>Kriter</th><th>Puan</th></tr>
+      <tr><td>Bütçe ≥5M / ≥3M / ≥1,5M / daha düşük</td><td>30 / 25 / 20 / 10</td></tr>
+      <tr><td>Lokasyon: Muratpaşa, Konyaaltı, Lara / diğer Antalya / diğer / boş</td><td>20 / 15 / 10 / 0</td></tr>
+      <tr><td>Amaç: Yatırım / Oturum / Tatil, Kira</td><td>20 / 18 / 15</td></tr>
+      <tr><td>İletişim: telefon+e-posta / yalnız telefon</td><td>15 / 10</td></tr>
+      <tr><td>Tip: Villa, Residence / Daire / diğer</td><td>15 / 12 / 10</td></tr></table></div></div>
+  </div>
+  <div class="card"><div class="row"><h2 style="margin:0">Lead Listesi</h2>
+    <input id="l-search" placeholder="Ara…" oninput="renderLeads()" style="max-width:180px"><button class="b s" id="l-sync" style="margin:0" onclick="syncRemote()">Ask·Q'dan Çek</button>
+    <select id="l-filter" onchange="renderLeads()" style="max-width:150px"><option value="">Tüm durumlar</option></select></div>
+    <div class="tw"><table><thead><tr><th>Ad</th><th>Bütçe</th><th>Lokasyon</th><th>Skor</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="leads"></tbody></table></div></div>
+</section>
+
+<section class="pg" id="p-wa">
+  <div class="g">
+    <div class="card"><h2>WhatsApp Mesajı</h2>
+      <label>Lead</label><select id="w-lead"></select>
+      <label>Ton</label><select id="w-tone"><option>Profesyonel ve samimi</option><option>Kısa ve net</option><option>Yatırım odaklı</option></select>
+      <label>Ek bağlam (yalnızca burada yazdığınız bilgiler mesaja girer)</label><input id="w-ctx" placeholder="Örn: Konyaaltı 3+1, fiyat ilan no ile paylaşılacak">
+      <button class="b" id="w-gen" onclick="genWA()">Groq ile Taslak Üret</button>
+      <label>Mesaj</label><textarea id="w-text"></textarea>
+      <button class="b ok" id="w-send" onclick="sendWA()">API ile Gönder</button>
+      <button class="b s" onclick="openWA()">wa.me ile Aç</button>
+      <button class="b s" onclick="copyTxt('w-text')">Kopyala</button>
+      <div class="note warn">Meta Cloud API tarayıcıdan doğrudan çağrıyı (CORS) engelleyebilir; bu durumda Ayarlar'daki Proxy URL'sini kullanın. Serbest metin yalnızca müşterinin son 24 saat içinde yazdığı konuşmada gider; aksi halde onaylı şablon gerekir.</div></div>
+    <div class="card"><h2>Gönderim Kaydı</h2><div id="w-log"></div></div>
+  </div>
+</section>
+
+<section class="pg" id="p-res">
+  <div class="card"><h2>Piyasa Araştırması (Tavily)</h2>
+    <label>Arama sorgusu</label><input id="r-q" placeholder="Örn: Antalya Konyaaltı satılık daire m² fiyatı">
+    <label>Sonuç sayısı</label><select id="r-n"><option>5</option><option>8</option><option>10</option></select>
+    <button class="b" id="r-go" onclick="research()">Ara</button>
+    <button class="b s" id="r-sum" onclick="summarize()" disabled>Groq ile Özetle</button>
+    <div class="note">Özet yalnızca aşağıdaki Tavily sonuçlarından üretilir. Sayı bulunmayan konuda "veri yok" yazılır; kaynak bağlantıları doğrulama içindir.</div>
+    <div id="r-out"></div><div id="r-ai"></div></div>
+</section>
+
+<section class="pg" id="p-fsbo">
+  <div class="g">
+    <div class="card"><h2>İlan Ekle (gerçek veri)</h2>
+      <label>İlan no</label><input id="f-no">
+      <label>URL</label><input id="f-url">
+      <label>Konum</label><input id="f-loc">
+      <label>Mülk tipi (opsiyonel)</label><select id="f-tip"><option value="">–</option><option>Daire</option><option>Villa</option><option>Residence</option><option>Yazlık</option><option>Arsa</option><option>Ticari</option></select>
+      <label>m²</label><input id="f-m2" type="number">
+      <label>İlk fiyat (₺)</label><input id="f-p0" type="number">
+      <label>Güncel fiyat (₺)</label><input id="f-p1" type="number">
+      <label>İlk yayın tarihi</label><input id="f-d0" type="date">
+      <label>Son güncelleme</label><input id="f-d1" type="date">
+      <label>Mal sahibi telefon</label><input id="f-ph">
+      <label>Emsal (kendi gözleminiz, ₺/m², opsiyonel)</label><input id="f-em" type="number">
+      <button class="b" onclick="saveFsbo()">Kaydet</button></div>
+    <div class="card"><h2>Yorgunluk Kuralı</h2>
+      <div class="note">İlanda &gt;30 gün +2, &gt;60 gün +3 ek · son güncelleme &gt;14 gün +2 · fiyat düşüşü +2 · emsalin üstünde ₺/m² +1. Tarih veya fiyat girilmediyse o kural puan vermez. Maksimum 10.</div></div>
+  </div>
+  <div class="card"><h2>Kayıtlı İlanlar</h2><div id="fsbo"></div></div>
+</section>
+
+<section class="pg" id="p-emsal">
+<div class="card"><h2>Medyan Pazar Analizi</h2>
+<div class="g">
+<div><label>Mahalle</label><select id="em-fm" onchange="emAnalyze()"></select></div>
+<div><label>Mülk tipi</label><select id="em-ft" onchange="emAnalyze()"><option value="">Tümü</option><option>Daire</option><option>Villa</option><option>Residence</option><option>Yazlık</option><option>Arsa</option><option>Ticari</option></select></div>
+<div><label>Dönem</label><select id="em-fd" onchange="emAnalyze()"><option value="90">Son 90 gün</option><option value="180">Son 180 gün</option><option value="365">Son 365 gün</option><option value="0">Tümü</option></select></div>
+</div>
+<div id="em-out" style="margin-top:12px"></div>
+<button class="b s" id="em-ai-b" onclick="emAI()" disabled>Groq ile yorumla</button>
+<div id="em-ai"></div>
+<div class="note">Medyanlar kodla hesaplanır, Groq yalnızca bu sayıları yorumlar. En az 5 kayıt gerekir. İstenen fiyat (ilan/FSBO) ile gerçekleşen bedel (işlem) ayrı hesaplanır. Tipi girilmemiş eski FSBO ilanları yalnızca tip "Tümü" iken analize girer.</div>
+</div>
+<div class="g">
+<div class="card"><h2>Emsal Ekle</h2>
+<label>İlan metni yapıştır (opsiyonel)</label>
+<textarea id="em-paste" placeholder="İlan metnini buraya yapıştırın"></textarea>
+<button class="b s" id="em-fillbtn" onclick="emFill()">Groq ile alanları doldur</button>
+<div class="note">Telefon numaraları gönderilmeden silinir. Alanlar yalnızca formu doldurur; kaydetmeden önce kontrol edin.</div>
+<label>Mahalle</label><input id="em-mah" list="em-mlist" placeholder="örn. Konyaaltı"><datalist id="em-mlist"></datalist>
+<label>Mülk tipi</label><select id="em-tip"><option>Daire</option><option>Villa</option><option>Residence</option><option>Yazlık</option><option>Arsa</option><option>Ticari</option></select>
+<label>m²</label><input id="em-m2" type="number" min="1" step="any">
+<label>Toplam fiyat (₺)</label><input id="em-fy" type="number" min="1" step="any">
+<label>Kaynak</label><select id="em-kay"><option value="ilan">İstenen fiyat (ilan)</option><option value="islem">Gerçekleşen bedel (işlem)</option></select>
+<label>Tarih</label><input id="em-d" type="date">
+<button class="b" onclick="emSave()">Emsal Kaydet</button>
+</div>
+<div class="card"><h2>Emsal Kayıtları</h2><div class="tw"><table><thead><tr><th>Mahalle</th><th>Tip</th><th>m²</th><th>Fiyat</th><th>₺/m²</th><th>Kaynak</th><th>Tarih</th><th></th></tr></thead><tbody id="em-list"></tbody></table></div></div>
+</div>
+</section>
+<section class="pg" id="p-fx">
+  <div class="card"><div class="row"><h2 style="margin:0">Döviz Radarı</h2><button class="b s" onclick="fetchFx()">Yenile</button><span id="fx-t" style="font-size:12px;color:var(--tx3)"></span></div>
+    <div class="st" id="fx-cards" style="margin-top:12px"></div>
+    <div class="note">Kaynak: jsDelivr currency-api. 30 gün önceki kurla karşılaştırılır. Veri alınamazsa tahmini kur gösterilmez.</div></div>
+  <div class="card"><h2>Satın Alma Gücü Sıralaması</h2><div id="fx-rank"></div></div>
+  <div class="card"><div class="row"><h2 style="margin:0">30 Gün Trend</h2><select id="fx-sel" style="max-width:100px"><option>EUR</option><option>USD</option><option>GBP</option><option>RUB</option><option>SAR</option></select><button class="b s" style="margin:0" onclick="drawChart()">Çiz</button></div><div style="height:220px;margin-top:10px"><canvas id="fx-cv"></canvas></div><div id="fx-ch-note" class="note">Yalnızca CDN'den alınan gerçek geçmiş kurlar çizilir; veri yoksa grafik çizilmez.</div></div>
+  <div class="card"><h2>Kur Alarmı</h2>
+    <div class="row"><select id="a-cur" style="max-width:100px"><option>EUR</option><option>USD</option><option>GBP</option><option>RUB</option><option>SAR</option></select>
+    <select id="a-dir" style="max-width:150px"><option value="above">Üstüne çıkarsa</option><option value="below">Altına düşerse</option></select>
+    <input id="a-val" type="number" step="0.01" placeholder="Hedef ₺" style="max-width:130px"><button class="b" style="margin:0" onclick="saveAlarm()">Ekle</button></div>
+    <div id="fx-al"></div></div>
+</section>
+<section class="pg" id="p-camp">
+  <div class="g"><div class="card"><h2>Yeni Kampanya</h2>
+    <label>Ad *</label><input id="c-t"><label>Bölge</label><input id="c-r"><label>Bütçe (₺)</label><input id="c-b" type="number"><label>Bitiş</label><input id="c-e" type="date"><label>Açıklama</label><textarea id="c-d"></textarea>
+    <button class="b" onclick="saveCamp()">Kaydet</button></div>
+  <div class="card"><h2>Kampanyalar</h2><div id="camps"></div></div></div>
+</section>
+<section class="pg" id="p-pool">
+  <div class="card"><div class="row"><h2 style="margin:0">Müşteri Havuzu</h2><button class="b s" style="margin:0" onclick="poolAI()">🤖 Yeniden Pazarlama Önerisi</button></div>
+    <div class="note">Kapandı ve Reddedildi durumundaki leadler otomatik burada görünür. AI'ya ad/telefon gönderilmez; yalnızca lokasyon, bütçe ve amaç gider.</div><div id="pool"></div><div id="pool-ai"></div></div>
+</section>
+<section class="pg" id="p-demo">
+  <div class="card"><h2>Demo</h2><div class="note warn">Demo kayıtları sentetiktir, gerçek müşteri değildir; "demo" işaretiyle saklanır ve tek tıkla silinir.</div>
+    <button class="b" onclick="loadDemo()">Demo Yükle</button><button class="b d" onclick="clearDemo()">Demo Temizle</button><div id="demo-n" class="note"></div></div>
+</section>
+<section class="pg" id="p-guide">
+  <div class="card"><h2>Kılavuz</h2>
+    <div class="tw"><table><tr><th>Modül</th><th>Kullanım</th></tr>
+    <tr><td>Ayarlar</td><td>Groq, Tavily ve WhatsApp bilgilerini girin, "Kaydet" ve test düğmelerini kullanın. Groq anahtarı console.groq.com, Tavily anahtarı tavily.com, WhatsApp token'ı Meta for Developers üzerinden alınır.</td></tr>
+    <tr><td>Leadler</td><td>Skor sabit kuralla hesaplanır; yabancı para bütçesi girilirse kayıt anındaki kur saklanır.</td></tr>
+    <tr><td>WhatsApp</td><td>Groq taslak üretir; API, Proxy veya wa.me ile gönderilir. CORS hatasında Proxy URL kullanın.</td></tr>
+    <tr><td>Piyasa</td><td>Tavily sonuçları ve yalnızca bu sonuçlara dayalı Groq özeti; kaynakları kontrol edin.</td></tr>
+    <tr><td>Yorgunluk</td><td>İlan bilgilerini kendiniz girersiniz; puan kural tablosundan çıkar.</td></tr>
+    <tr><td>FSBO mülk tipi</td><td>Yorgun İlan formundaki "Mülk tipi" alanı opsiyoneldir. Girilirse ilan, Emsal analizinde ve alıcı eşleşmesinde yalnızca aynı tipteki kayıtlarla karşılaştırılır. Tipsiz eski ilanlar yalnızca tip "Tümü" iken analize girer.</td></tr>
+    <tr><td>Emsal</td><td>Mahalle, tip, m², toplam fiyat, kaynak (istenen fiyat veya gerçekleşen bedel) ve tarih girin; ilan metnini yapıştırıp "Groq ile alanları doldur" ile formu doldurabilirsiniz (kontrol edip kaydedin). Medyan, Q1–Q3 bandı ve uç değer ayıklama kodla hesaplanır, Groq yalnızca sayıları yorumlar. Bir grupta 5'ten az kayıt varsa "yetersiz veri" yazılır. İstenen fiyat ile gerçekleşen bedel ayrı hesaplanır. Pazarlık ve arz–talep paneli kayıtlı FSBO ilanlardan ve lead bütçelerinden çıkar. Yorgun İlan sayfasında emsal kaydı olan mahallelerdeki ilanların altında medyana göre fark görünür.</td></tr>
+    <tr><td>Bugün Kimi Aramalı</td><td>Panel'in üstünde yer alır; yapay zekâ kullanılmaz. Lead puanı = skor + bekleme (yeni lead için günde 2 puan, en çok 14 gün) + randevu/teklif aşamasında 15 + uyan ilan varsa 10. FSBO ilanlar yorgunluk puanı × 10 ile listelenir (yalnızca 5 ve üstü). İlan yaşı mal sahibinin yorulduğunu kanıtlamaz, yalnızca ipucudur.</td></tr>
+    <tr><td>Alıcı ↔ İlan Eşleşmeleri</td><td>Lead lokasyonundaki mahalle adı ilan konumunda geçmeli; bütçe girildiyse ilan fiyatı bütçenin %60–110'u arasında olmalı; ikisinde de mülk tipi varsa aynı olmalı. Lead başına en çok 3 ilan gösterilir. "WhatsApp için bağlam doldur" yalnızca "Ek bağlam" alanını doldurur, mesajı siz üretip kontrol edersiniz. Lokasyonu yalnızca "Antalya" olan lead eşleşmez.</td></tr>
+    <tr><td>Döviz</td><td>Dövizli leadlerin TL karşılığındaki değişim; hedef kur alarmı.</td></tr>
+    <tr><td>Yükleme</td><td>Android/Chrome: üstteki "Uygulamayı Yükle" düğmesi. iPhone: Safari → Paylaş → Ana Ekrana Ekle. Güncelleme sonrası uygulamayı bir kez kapatıp açın.</td></tr>
+    <tr><td>Veri</td><td>Her şey tarayıcı localStorage'ındadır; düzenli "Dışa Aktar" yedeği alın.</td></tr></table></div></div>
+</section>
+
+<section class="pg" id="p-set">
+  <div class="g">
+    <div class="card"><h2>Groq</h2>
+      <label>API key (gsk_…)</label><input id="s-gk" type="password" autocomplete="off">
+      <label>Model</label><input id="s-gm" list="models"><datalist id="models"></datalist>
+      <button class="b s" onclick="loadModels()">Güncel Modelleri Çek</button>
+      <button class="b s" onclick="testGroq()">Test</button>
+      <div class="note">Model listesi doğrudan Groq /models uç noktasından gelir; listedeki adı seçin.</div></div>
+    <div class="card"><h2>Tavily</h2>
+      <label>API key (tvly-…)</label><input id="s-tk" type="password" autocomplete="off">
+      <button class="b s" onclick="testTavily()">Test</button></div>
+    <div class="card"><h2>WhatsApp</h2>
+      <label>Cloud API access token</label><input id="s-wt" type="password" autocomplete="off">
+      <label>Phone Number ID</label><input id="s-wp">
+      <label>Graph API sürümü</label><input id="s-wv" placeholder="v21.0">
+      <label>Proxy URL (opsiyonel, POST {to,text})</label><input id="s-wx" placeholder="https://…workers.dev/wa">
+      <label>Gönderici imzası</label><input id="s-sn">
+      <button class="b s" onclick="testWA()">Token Test</button></div>
+    <div class="card"><h2>Ask·Q Worker (Proxy)</h2><label>Worker URL</label><input id="s-px" placeholder="https://….workers.dev"><label>Yönetici şifresi (LEADS_SECRET)</label><input id="s-ps" type="password" autocomplete="off"><button class="b s" onclick="testPx()">Bağlantıyı Test Et</button><div class="note">Kullanılan uç noktalar: GET /leads, GET /leads/stats, POST /lead-status, POST /lead-delete. Worker yalnızca izinli Origin'e yanıt verir (varsayılan zamby5.github.io): CRM'i oradan veya ALLOWED_ORIGINS'e eklediğiniz adresten açın; file:// ile 403 alırsınız.</div></div>
+    <div class="card"><h2>Veri</h2>
+      <button class="b" onclick="saveSettings()">Ayarları Kaydet</button>
+      <button class="b s" onclick="exportData()">Dışa Aktar</button>
+      <button class="b s" onclick="document.getElementById('imp').click()">İçe Aktar</button>
+      <button class="b d" onclick="wipe()">Tümünü Sil</button>
+      <input type="file" id="imp" accept=".json" hidden onchange="doImport(event)">
+      <div class="note warn">Key'ler yalnızca bu tarayıcının localStorage alanında saklanır. Ortak cihazda kullanmayın; mümkünse çağrıları kendi Worker proxy'nizden geçirin.</div>
+      <div id="s-res"></div></div>
+  </div>
+</section>
+
+</main>
+</div>
+<div id="toast"></div>
+
+<script>
+var KEY='proptech_crm_v3';
+var STAT={yeni:'Yeni',iletisim:'İletişim',randevu:'Randevu',teklif:'Teklif',kapandi:'Kapandı',red:'Reddedildi'};
+var DB={leads:[],tasks:[],fsbo:[],wa:[],camps:[],alarms:[],emsal:[],s:{groqKey:'',groqModel:'openai/gpt-oss-120b',pxUrl:'',pxSecret:'',tavilyKey:'',waToken:'',waPhoneId:'',waVer:'v21.0',waProxy:'',sender:'Murat İyicioğlu – Turyap Queen'}};
+var lastSearch=null;
+
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function val(i){return $(i).value.trim()}
+function toast(m,t,ms){var d=document.createElement('div');d.className=t||'';d.textContent=m;$('toast').appendChild(d);setTimeout(function(){d.remove()},ms||3500)}
+function load(){try{var d=JSON.parse(localStorage.getItem(KEY)||'{}');['leads','tasks','fsbo','wa','camps','alarms','emsal'].forEach(function(k){if(d[k])DB[k]=d[k]});if(d.s)DB.s=Object.assign(DB.s,d.s);if(/^(llama-3\.3-70b-versatile|llama-3\.1-8b-instant|gemma2)/.test(DB.s.groqModel))DB.s.groqModel='openai/gpt-oss-120b'}catch(e){}}
+function save(){setTimeout(navBadges,0);try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){toast('Kayıt hatası: '+e.message,'e')}}
+function fmtTL(n){return n?Number(n).toLocaleString('tr-TR')+' ₺':'–'}
+function sc(n){return '<span class="sc '+(n>=70?'hi':n>=40?'mi':'lo')+'">'+n+'</span>'}
+
+/* NAV */
+var PAGES=[['dash','Panel'],['leads','Leadler'],['wa','WhatsApp'],['res','Piyasa'],['fsbo','Yorgun İlan'],['emsal','Emsal'],['fx','Döviz'],['camp','Kampanya'],['pool','Havuz'],['demo','Demo'],['guide','Kılavuz'],['set','Ayarlar']];
+function go(p){PAGES.forEach(function(x){$('p-'+x[0]).classList.toggle('on',x[0]===p)});[].forEach.call($('nav').querySelectorAll('button'),function(b){b.classList.toggle('on',b.dataset.p===p)});navBadges();
+  if(p==='dash'){renderDash();renderFunnel();renderToday()}if(p==='pool')renderPool();if(p==='leads'){fillCamp();renderLeads()}if(p==='wa'){fillWA();renderWALog()}if(p==='fsbo')renderFsbo();if(p==='emsal')renderEmsal();if(p==='set')fillSettings();if(p==='fx')renderFx();if(p==='camp')renderCamp();if(p==='demo')renderDemo()}
+
+/* AI CLIENTS */
+var FALL=['openai/gpt-oss-20b'];
+function clean(t){return String(t||'').replace(/de[ğg]erleme\w*/gi,'yatırım analizi').replace(/apprais\w*/gi,'investment analysis')}
+function figs(t){var o=[],re=/(\d{1,3}(?:[.,\u00a0 ]\d{3})+(?!\d)|\d+(?:[.,]\d+)?)\s*(milyar|milyon|bin)?(?![\p{L}\d])/giu,m;
+  t=String(t||'').replace(/\+?\d[\d\s().-]{8,}\d/g,function(x){return x.replace(/\D/g,'').length>=10&&!/[.,]\d{3}(?!\d)/.test(x)?' ':x});
+  while((m=re.exec(t))){var g=/^\d{1,3}(?:[.,\u00a0 ]\d{3})+$/.test(m[1]),v=g?Number(m[1].replace(/\D/g,'')):Number(m[1].replace(',','.')),u={milyar:1e9,milyon:1e6,bin:1e3}[(m[2]||'').toLowerCase()];if(u)v*=u;if(isFinite(v)&&v>=10000)o.push(v)}return o}
+function ungr(out,src){var g=figs(src);return figs(out).filter(function(v){return !g.some(function(x){return Math.abs(x-v)<=Math.max(1,x*.01)})})}
+async function groq(sys,usr,json){
+  var k=DB.s.groqKey;if(!k)throw new Error('Groq API key girilmedi (Ayarlar).');
+  var ms=[DB.s.groqModel].concat(FALL.filter(function(m){return m!==DB.s.groqModel})),err=null;
+  for(var i=0;i<ms.length;i++){
+    var body={model:ms[i],temperature:0.2,max_completion_tokens:1500,messages:[{role:'system',content:sys},{role:'user',content:usr}]};
+    if(/^openai\/gpt-oss/.test(ms[i]))body.reasoning_effort='low';
+    if(json)body.response_format={type:'json_object'};
+    var r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},body:JSON.stringify(body)});
+    var d=await r.json().catch(function(){return{}});
+    if(r.ok){var t=clean((d.choices&&d.choices[0]&&d.choices[0].message.content||'').trim());if(t){var w=ungr(t,usr);if(w.length)toast('⚠ Kaynakta olmayan rakam: '+w.join(', ')+' — göndermeden önce kontrol edin','e',9000);return t}err=new Error('Model boş yanıt döndürdü ('+ms[i]+')');continue}
+    err=new Error((d.error&&d.error.message)||('HTTP '+r.status));
+    if([400,404,429,503].indexOf(r.status)<0)throw err;
+  }
+  throw err;
+}
+async function tavily(q,n){
+  var k=DB.s.tavilyKey;if(!k)throw new Error('Tavily API key girilmedi (Ayarlar).');
+  var r=await fetch('https://api.tavily.com/search',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},body:JSON.stringify({query:q,search_depth:'basic',max_results:n||5,include_answer:false})});
+  var d=await r.json().catch(function(){return{}});
+  if(!r.ok)throw new Error((d.detail&&d.detail.error)||d.error||('HTTP '+r.status));
+  return d.results||[];
+}
+var NOHALL='KESİN KURAL: Yalnızca sana verilen verileri kullan. Fiyat, ilan, emsal, mevzuat oranı, tarih veya istatistik uydurma. Verilmeyen bilgi için "[bilgi girilmedi]" veya "veri yok" yaz. Türkçe, net ve profesyonel yaz. "Değerleme", "appraisal" veya resmi ekspertiz ifadelerini kullanma; "yatırım analizi", "piyasa analizi" de.';
+
+/* SCORE (deterministik) */
+function calcScore(l){
+  var b=Number(l.budget)||0,p=0;
+  p+=b>=5e6?30:b>=3e6?25:b>=1.5e6?20:b>0?10:0;
+  var loc=(l.location||'').toLowerCase();
+  p+=/muratpaşa|muratpasa|konyaaltı|konyaalti|lara/.test(loc)?20:loc.indexOf('antalya')>-1?15:loc?10:0;
+  p+={'Yatırım':20,'Oturum':18,'Tatil':15,'Kira geliri':15}[l.purpose]||0;
+  p+=l.phone&&l.email?15:l.phone?10:0;
+  p+=(l.propType==='Villa'||l.propType==='Residence')?15:l.propType==='Daire'?12:l.propType?10:0;
+  return p;
+}
+
+/* DASHBOARD */
+function renderDash(){
+  var L=DB.leads,open=L.filter(function(l){return l.status!=='kapandi'&&l.status!=='red'}).length,cl=L.filter(function(l){return l.status==='kapandi'}).length;
+  var avg=L.length?Math.round(L.reduce(function(a,l){return a+(l.score||0)},0)/L.length):0;
+  var items=[['Toplam lead',L.length],['Açık',open],['Kapandı',cl],['Ort. skor',L.length?avg:'–'],['Bekleyen görev',DB.tasks.filter(function(t){return !t.done}).length],['Kayıtlı ilan',DB.fsbo.length]];
+  $('stats').innerHTML=items.map(function(i){return '<div><b>'+i[1]+'</b><span>'+i[0]+'</span></div>'}).join('');
+  $('tasks').innerHTML=DB.tasks.length?DB.tasks.map(function(t){return '<div class="row" style="padding:6px 0;border-bottom:1px solid var(--bd)"><input type="checkbox" style="width:auto" '+(t.done?'checked':'')+' onchange="toggleTask(\''+t.id+'\')"><span style="flex:1;'+(t.done?'text-decoration:line-through;opacity:.5':'')+'">'+esc(t.title)+'</span><button class="b s" style="margin:0;padding:3px 8px" onclick="delTask(\''+t.id+'\')">✕</button></div>'}).join(''):'<div class="note">Görev yok.</div>';
+  var s=DB.s;
+  $('conn').innerHTML=[['Groq',s.groqKey],['Tavily',s.tavilyKey],['WhatsApp API',(s.waToken&&s.waPhoneId)||s.waProxy],['Ask·Q Worker',s.pxUrl&&s.pxSecret]].map(function(x){return '<div>'+(x[1]?'🟢':'⚪')+' '+x[0]+': '+(x[1]?'key girildi':'girilmedi')+'</div>'}).join('');
+}
+function addTask(){var t=val('t-title');if(!t)return;DB.tasks.unshift({id:'T'+Date.now(),title:t,done:false});$('t-title').value='';save();renderDash()}
+function toggleTask(id){var t=DB.tasks.find(function(x){return x.id===id});if(t){t.done=!t.done;save();renderDash()}}
+function delTask(id){DB.tasks=DB.tasks.filter(function(x){return x.id!==id});save();renderDash()}
+
+/* LEADS */
+function saveLead(){
+  var n=val('l-name'),ph=val('l-phone');if(!n||!ph){toast('Ad ve telefon zorunlu','e');return}
+  var pd=waNum(ph);if(DB.leads.some(function(x){return x.phone&&waNum(x.phone)===pd})&&!confirm('Bu telefonla kayıtlı bir lead var. Yine de eklensin mi?'))return;
+  var cur=val('l-cur'),fxb=Number(val('l-fxb'))||0,rate=(cur!=='TRY'&&FX.r[cur])||0;
+  if(cur!=='TRY'&&fxb&&!rate)toast('Kur verisi yok: döviz bütçesi TL\'ye çevrilemedi, bütçe 0 kaydedildi','e',6000);
+  var l={id:'L'+Date.now(),name:n,phone:ph,email:val('l-email'),budget:Number(val('l-budget'))||Math.round(fxb*rate),camp:val('l-camp'),cur:cur,fxBudget:fxb,fxRate:rate,location:val('l-loc'),propType:val('l-type'),purpose:val('l-purpose'),notes:val('l-notes'),status:'yeni',createdAt:new Date().toISOString()};
+  l.score=calcScore(l);DB.leads.unshift(l);save();
+  ['l-name','l-phone','l-email','l-budget','l-fxb','l-loc','l-notes'].forEach(function(i){$(i).value=''});
+  toast(n+' kaydedildi, skor '+l.score,'k');renderLeads();
+}
+function renderLeads(){
+  var f=$('l-filter').value,q=val('l-search').toLowerCase();
+  var list=DB.leads.filter(function(l){return (!f||l.status===f)&&(!q||[l.name,l.phone,l.email,l.location].join(' ').toLowerCase().indexOf(q)>-1)});
+  $('leads').innerHTML=list.length?list.map(function(l){
+    var o=Object.keys(STAT).map(function(k){return '<option value="'+k+'"'+(l.status===k?' selected':'')+'>'+STAT[k]+'</option>'}).join('');
+    var ap=l.ap&&l.ap.profile_tag?'<div style="font-size:11px;color:var(--tx2)">🧠 '+esc(l.ap.profile_tag)+'</div>':'';
+    return '<tr><td><b>'+esc(l.name)+'</b>'+(l.rid?' <span class="sc mi" title="Ask·Q kaynaklı">Ask·Q</span>':'')+'<div style="font-size:11px;color:var(--tx3)">'+esc(l.phone)+(l.email?' · '+esc(l.email):'')+'</div>'+ap+'</td><td>'+fmtTL(l.budget)+'</td><td>'+esc(l.location||'–')+'</td><td>'+sc(l.score||0)+'</td><td><select data-id="'+esc(l.id)+'" onchange="setStatus(this.dataset.id,this.value)" style="min-width:110px">'+o+'</select></td><td><button class="b s" data-id="'+esc(l.id)+'" style="margin:0 4px 0 0;padding:4px 8px" onclick="quickWA(this.dataset.id)">💬</button><button class="b d" data-id="'+esc(l.id)+'" style="margin:0;padding:4px 8px" onclick="delLead(this.dataset.id)">🗑</button></td></tr>';
+  }).join(''):'<tr><td colspan="6" style="text-align:center;color:var(--tx3)">Kayıt yok</td></tr>';
+}
+async function px(path,opt){
+  var s=DB.s;if(!s.pxUrl||!s.pxSecret)throw new Error('Worker URL ve şifre girilmedi (Ayarlar).');
+  var r=await fetch(s.pxUrl+path,Object.assign({headers:{'Content-Type':'application/json','x-leads-secret':s.pxSecret}},opt||{}));
+  var d=await r.json().catch(function(){return{}});
+  if(!r.ok)throw new Error(r.status===403?'403: bu Origin Worker izin listesinde değil (file:// çalışmaz)':r.status===401?'401: yönetici şifresi hatalı':r.status===429?'429: Worker hız sınırı, biraz bekleyin':(d.error||'HTTP '+r.status));
+  return d;
+}
+function mapSt(s){s=(s||'').toLowerCase();return /silindi/.test(s)?null:/randevu/.test(s)?'randevu':/teklif/.test(s)?'teklif':/kapan|satıl|satil/.test(s)?'kapandi':/red/.test(s)?'red':/aran|iletişim|iletisim/.test(s)?'iletisim':'yeni'}
+async function syncRemote(){
+  var b=$('l-sync');b.disabled=true;
+  try{
+    var arr=await px('/leads');if(!Array.isArray(arr))throw new Error('Beklenmeyen Worker yanıtı');
+    var add=0,upd=0;
+    arr.forEach(function(r){
+      var st=mapSt(r.status);if(st===null||!r.id)return;
+      var f={rid:r.id,name:r.name||'(isimsiz)',phone:r.phone||'',email:r.email||'',location:r.region||'',ap:r.analysis_result||null,status:st,cur:'TRY'};
+      var l=DB.leads.find(function(x){return x.rid===r.id});
+      if(l){Object.assign(l,f);upd++}
+      else{l=Object.assign({id:'L'+Date.now()+'_'+add,budget:0,propType:'',purpose:'',notes:'Ask·Q'+(r.budget_property_type?' · talep: '+r.budget_property_type:'')+(r.topic?' · konu: '+r.topic:''),createdAt:r.createdAt||new Date().toISOString()},f);DB.leads.unshift(l);add++}
+      l.score=calcScore(l);
+    });
+    save();renderLeads();toast(add+' yeni, '+upd+' güncellenen Ask·Q lead','k');
+  }catch(e){toast(e.message,'e',6000)}
+  b.disabled=false;
+}
+async function testPx(){saveSettings();try{var d=await px('/leads/stats');res('Worker bağlı: '+d.total+' lead, '+d.analyzed+' profil analizli.',true)}catch(e){res('Worker hatası: '+e.message)}}
+function setStatus(id,s){var l=DB.leads.find(function(x){return x.id===id});if(!l)return;l.status=s;save();
+  if(l.rid)px('/lead-status',{method:'POST',body:JSON.stringify({id:l.rid,status:s})}).then(function(){toast('Worker\'a işlendi','k')},function(e){toast('Yalnızca yerelde değişti: '+e.message,'e',6000)})}
+async function delLead(id){
+  var l=DB.leads.find(function(x){return x.id===id});if(!l||!confirm('Lead silinsin mi?'))return;
+  if(l.rid&&DB.s.pxUrl&&confirm('Bu Ask·Q lead\'i Worker\'dan da silinsin mi? (Hayır dersen sonraki çekişte geri gelir)')){
+    try{await px('/lead-delete',{method:'POST',body:JSON.stringify({id:l.rid})})}catch(e){toast('Worker silme hatası: '+e.message,'e',6000);return}}
+  DB.leads=DB.leads.filter(function(x){return x.id!==id});save();renderLeads();
+}
+
+/* WHATSAPP */
+function fillWA(){$('w-lead').innerHTML='<option value="">— Lead seçin —</option>'+DB.leads.map(function(l){return '<option value="'+l.id+'">'+esc(l.name)+'</option>'}).join('')}
+function quickWA(id){go('wa');$('w-lead').value=id}
+function selLead(){return DB.leads.find(function(l){return l.id===$('w-lead').value})}
+async function genWA(){
+  var l=selLead();if(!l){toast('Lead seçin','e');return}
+  var b=$('w-gen');b.disabled=true;
+  try{
+    var data='Ad: '+l.name+'\nLokasyon: '+(l.location||'[bilgi girilmedi]')+'\nBütçe: '+(l.budget?fmtTL(l.budget):'[bilgi girilmedi]')+'\nAmaç: '+l.purpose+'\nMülk tipi: '+l.propType+'\nEk bağlam: '+(val('w-ctx')||'[bilgi girilmedi]')+'\nTon: '+val('w-tone')+'\nİmza: '+DB.s.sender;
+    $('w-text').value=await groq('Emlak danışmanı adına kısa bir WhatsApp mesajı yaz: kişiye hitap, ilgi alanına atıf, net bir randevu/arama çağrısı, imza. Mesajda fiyat veya portföy bilgisi verme, yalnızca ek bağlamda yazılanı kullan. '+NOHALL,data);
+  }catch(e){toast(e.message,'e')}
+  b.disabled=false;
+}
+function waNum(p){var d=(p||'').replace(/\D/g,'');if(d.indexOf('00')===0)d=d.slice(2);if(d.length===10&&d[0]==='5')d='90'+d;if(d.length===11&&d[0]==='0')d='9'+d;return d}
+function openWA(){var l=selLead(),t=val('w-text');if(!l||!t){toast('Lead ve mesaj gerekli','e');return}window.open('https://wa.me/'+waNum(l.phone)+'?text='+encodeURIComponent(t),'_blank')}
+function copyTxt(id){navigator.clipboard.writeText($(id).value).then(function(){toast('Kopyalandı','k')},function(){toast('Kopyalanamadı','e')})}
+async function sendWA(){
+  var l=selLead(),t=val('w-text'),s=DB.s;if(!l||!t){toast('Lead ve mesaj gerekli','e');return}
+  var to=waNum(l.phone);
+  if(!s.waProxy&&!(s.waToken&&s.waPhoneId)){toast('WhatsApp API bilgisi girilmedi (Ayarlar)','e');return}
+  var b=$('w-send');b.disabled=true;var ok=false,info='';
+  try{
+    var r;
+    if(s.waProxy){r=await fetch(s.waProxy,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:to,text:t})})}
+    else{r=await fetch('https://graph.facebook.com/'+(s.waVer||'v21.0')+'/'+s.waPhoneId+'/messages',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.waToken},body:JSON.stringify({messaging_product:'whatsapp',to:to,type:'text',text:{body:t}})})}
+    var d=await r.json().catch(function(){return{}});
+    ok=r.ok;info=ok?'API kabul etti':(r.status===404&&s.waProxy?'Proxy\'de bu uç nokta yok (404): Worker şu an /wa sunmuyor':((d.error&&d.error.message)||'HTTP '+r.status));
+  }catch(e){info='Ağ/CORS hatası: '+e.message+' — Proxy URL kullanın veya wa.me ile açın'}
+  DB.wa.unshift({time:new Date().toLocaleString('tr-TR'),name:l.name,to:to,ok:ok,info:info,text:t});DB.wa=DB.wa.slice(0,50);save();renderWALog();
+  toast(info,ok?'k':'e');b.disabled=false;
+}
+function renderWALog(){$('w-log').innerHTML=DB.wa.length?DB.wa.map(function(m){return '<div class="note"><b>'+(m.ok?'✅':'❌')+' '+esc(m.name)+'</b> · '+esc(m.time)+'<br>'+esc(m.info)+'<br><span style="color:var(--tx3)">'+esc(m.text.slice(0,140))+(m.text.length>140?'…':'')+'</span></div>'}).join(''):'<div class="note">Henüz gönderim yok. Yalnızca API'+"'"+'nin kabul ettiği mesajlar ✅ olarak kaydedilir.</div>'}
+
+/* PIYASA (Tavily + Groq) */
+async function research(){
+  var q=val('r-q');if(!q){toast('Sorgu girin','e');return}
+  var b=$('r-go');b.disabled=true;$('r-ai').innerHTML='';$('r-out').innerHTML='<div class="note">Aranıyor…</div>';
+  try{
+    var res=await tavily(q,Number(val('r-n')));lastSearch={q:q,res:res};
+    $('r-out').innerHTML=res.length?res.map(function(r){return '<div class="note src"><a href="'+esc(r.url)+'" target="_blank" rel="noopener"><b>'+esc(r.title)+'</b></a><br>'+esc((r.content||'').slice(0,320))+'…</div>'}).join(''):'<div class="note">Sonuç bulunamadı.</div>';
+    $('r-sum').disabled=!res.length;
+  }catch(e){$('r-out').innerHTML='<div class="note warn">'+esc(e.message)+'</div>'}
+  b.disabled=false;
+}
+async function summarize(){
+  if(!lastSearch)return;var b=$('r-sum');b.disabled=true;$('r-ai').innerHTML='<div class="note">Özetleniyor…</div>';
+  try{
+    var src=lastSearch.res.map(function(r,i){return '['+(i+1)+'] '+r.title+' ('+r.url+')\n'+r.content}).join('\n\n');
+    var t=await groq('Gayrimenkul piyasa analisti olarak yalnızca kaynaklardaki bilgilerle özet yaz. Her sayısal ifadenin yanına kaynak numarasını [n] yaz. Kaynaklar çelişiyorsa çelişkiyi belirt. Kaynaklarda olmayan sayı üretme; olmayan konu için "veri yok" yaz. '+NOHALL,'Sorgu: '+lastSearch.q+'\n\nKaynaklar:\n'+src);
+    $('r-ai').innerHTML='<div class="out">'+esc(t)+'</div>';
+  }catch(e){$('r-ai').innerHTML='<div class="note warn">'+esc(e.message)+'</div>'}
+  b.disabled=false;
+}
+
+/* YORGUN ILAN (deterministik) */
+function dayDiff(d){if(!d)return null;var t=new Date(d).getTime();return isNaN(t)?null:Math.floor((Date.now()-t)/864e5)}
+function fatigue(f){
+  var p=0,why=[],g=dayDiff(f.d0),u=dayDiff(f.d1);
+  if(g!==null){if(g>30){p+=2;why.push(g+' gündür ilanda')}if(g>60)p+=3}
+  if(u!==null&&u>14){p+=2;why.push('son güncelleme '+u+' gün önce')}
+  if(f.p0&&f.p1&&f.p1<f.p0){p+=2;why.push('fiyat %'+((f.p0-f.p1)/f.p0*100).toFixed(1)+' düştü')}
+  if(f.em&&f.m2&&f.p1&&f.p1/f.m2>f.em){p+=1;why.push('₺/m² girilen emsalin üstünde')}
+  return{p:Math.min(10,p),why:why.length?why.join(', '):'puan veren kriter yok',g:g};
+}
+function saveFsbo(){
+  var f={id:'F'+Date.now(),no:val('f-no'),url:val('f-url'),loc:val('f-loc'),tip:val('f-tip'),m2:Number(val('f-m2'))||0,p0:Number(val('f-p0'))||0,p1:Number(val('f-p1'))||0,d0:val('f-d0'),d1:val('f-d1'),ph:val('f-ph'),em:Number(val('f-em'))||0,pitch:''};
+  if(!f.no&&!f.url){toast('İlan no veya URL zorunlu','e');return}
+  if(!f.p1){toast('Güncel fiyat zorunlu','e');return}
+  DB.fsbo.unshift(f);save();['f-no','f-url','f-loc','f-tip','f-m2','f-p0','f-p1','f-d0','f-d1','f-ph','f-em'].forEach(function(i){$(i).value=''});renderFsbo();toast('İlan kaydedildi','k');
+}
+function renderFsbo(){
+  $('fsbo').innerHTML=DB.fsbo.length?DB.fsbo.map(function(f){var x=fatigue(f);
+    return '<div class="note"><div class="row"><b style="flex:1">'+esc(f.loc||'Konum girilmedi')+(f.no?' · #'+esc(f.no):'')+'</b>'+sc(x.p)+'<span style="font-size:11px">/10</span></div>'+
+      '<div>'+fmtTL(f.p1)+(f.m2?' · '+f.m2+' m² · '+Math.round(f.p1/f.m2).toLocaleString('tr-TR')+' ₺/m²':'')+'</div>'+emsalBadge(f)+'<div style="color:var(--tx2)">'+esc(x.why)+'</div>'+
+      (f.url?'<a href="'+esc(f.url)+'" target="_blank" rel="noopener">İlana git</a> ':'')+
+      '<div><button class="b" style="padding:4px 10px" onclick="pitch(\''+f.id+'\')">Çapalama Metni (Groq)</button><button class="b s" style="padding:4px 10px" onclick="fsboToLead(\''+f.id+'\')">CRM\'e Ekle</button><button class="b d" style="padding:4px 10px" onclick="delFsbo(\''+f.id+'\')">Sil</button></div>'+
+      (f.pitch?'<div class="out">'+esc(f.pitch)+'</div>':'')+'</div>';
+  }).join(''):'<div class="note">Henüz ilan yok.</div>';
+}
+async function pitch(id){
+  var f=DB.fsbo.find(function(x){return x.id===id}),x=fatigue(f);
+  try{
+    var d='İlan no: '+(f.no||'[bilgi girilmedi]')+'\nKonum: '+(f.loc||'[bilgi girilmedi]')+'\nm²: '+(f.m2||'[bilgi girilmedi]')+'\nGüncel fiyat: '+fmtTL(f.p1)+'\nİlk fiyat: '+(f.p0?fmtTL(f.p0):'[bilgi girilmedi]')+'\nİlanda gün: '+(x.g===null?'[bilgi girilmedi]':x.g)+'\nEmsal ₺/m²: '+(f.em?f.em:'[bilgi girilmedi]')+'\nİmza: '+DB.s.sender;
+    f.pitch=await groq('Mal sahibine gönderilecek kısa, saygılı bir ilk iletişim mesajı yaz. Yalnızca verilen alanları kullan; emsal yoksa emsalden söz etme. Satış garantisi veya fiyat vaadi verme. '+NOHALL,d);
+    save();renderFsbo();
+  }catch(e){toast(e.message,'e')}
+}
+function fsboToLead(id){
+  var f=DB.fsbo.find(function(x){return x.id===id});if(!f)return;
+  var l={id:'L'+Date.now(),name:'Mal sahibi – '+(f.loc||'')+(f.no?' #'+f.no:''),phone:f.ph||'',email:'',budget:f.p1,cur:'TRY',location:f.loc,propType:'',purpose:'',notes:'FSBO kaynak. '+(f.url||''),status:'yeni',createdAt:new Date().toISOString()};
+  l.score=calcScore(l);DB.leads.unshift(l);save();
+  toast(f.ph?'CRM\'e eklendi':'CRM\'e eklendi — telefon yok, WhatsApp için lead\'i tamamlayın',f.ph?'k':'e');
+}
+function delFsbo(id){DB.fsbo=DB.fsbo.filter(function(x){return x.id!==id});save();renderFsbo()}
+
+/* SETTINGS */
+function fillSettings(){var s=DB.s;$('s-gk').value=s.groqKey;$('s-gm').value=s.groqModel;$('s-tk').value=s.tavilyKey;$('s-wt').value=s.waToken;$('s-wp').value=s.waPhoneId;$('s-wv').value=s.waVer;$('s-wx').value=s.waProxy;$('s-sn').value=s.sender;$('s-px').value=s.pxUrl;$('s-ps').value=s.pxSecret}
+function saveSettings(){var s=DB.s;s.groqKey=val('s-gk');s.groqModel=val('s-gm')||s.groqModel;s.tavilyKey=val('s-tk');s.waToken=val('s-wt');s.waPhoneId=val('s-wp');s.waVer=val('s-wv')||'v21.0';s.waProxy=val('s-wx');s.sender=val('s-sn')||s.sender;s.pxUrl=val('s-px').replace(/\/+$/,'');s.pxSecret=val('s-ps');save();toast('Ayarlar kaydedildi','k')}
+function res(m,ok){$('s-res').innerHTML='<div class="note '+(ok?'':'warn')+'">'+esc(m)+'</div>'}
+async function loadModels(){
+  saveSettings();
+  try{var r=await fetch('https://api.groq.com/openai/v1/models',{headers:{Authorization:'Bearer '+DB.s.groqKey}});var d=await r.json();if(!r.ok)throw new Error((d.error&&d.error.message)||'HTTP '+r.status);
+    var ids=(d.data||[]).map(function(m){return m.id}).sort();$('models').innerHTML=ids.map(function(i){return '<option value="'+esc(i)+'">'}).join('');res(ids.length+' model listelendi. Model alanına tıklayıp seçin.',true)}
+  catch(e){res('Model listesi alınamadı: '+e.message)}
+}
+async function testGroq(){saveSettings();try{var t=await groq('Yalnızca "ok" yaz.','test');res('Groq bağlı ('+DB.s.groqModel+'): '+t,true)}catch(e){res('Groq hatası: '+e.message)}}
+async function testTavily(){saveSettings();try{var r=await tavily('Antalya emlak',1);res('Tavily bağlı, '+r.length+' sonuç döndü.',true)}catch(e){res('Tavily hatası: '+e.message)}}
+async function testWA(){
+  saveSettings();var s=DB.s;if(!s.waToken||!s.waPhoneId){res('Token ve Phone Number ID girin.');return}
+  try{var r=await fetch('https://graph.facebook.com/'+(s.waVer||'v21.0')+'/'+s.waPhoneId,{headers:{Authorization:'Bearer '+s.waToken}});var d=await r.json();if(!r.ok)throw new Error((d.error&&d.error.message)||'HTTP '+r.status);res('Token geçerli. Numara: '+(d.display_phone_number||'–'),true)}
+  catch(e){res('WhatsApp hatası: '+e.message+' (CORS ise Proxy URL kullanın)')}
+}
+function exportData(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(Object.assign({},DB,{s:Object.assign({},DB.s,{groqKey:'',tavilyKey:'',waToken:'',pxSecret:''})}),null,2)],{type:'application/json'}));a.download='proptech-crm-'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('Dışa aktarıldı (key\'ler hariç)','k')}
+function doImport(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);['leads','tasks','fsbo','wa','camps','alarms','emsal'].forEach(function(k){if(Array.isArray(d[k]))DB[k]=d[k]});save();toast('İçe aktarıldı','k');go('dash')}catch(x){toast('JSON hatası: '+x.message,'e')}};r.readAsText(f);e.target.value=''}
+function wipe(){if(confirm('Tüm veriler ve key\'ler silinsin mi?')){localStorage.removeItem(KEY);location.reload()}}
+
+/* DOVIZ */
+var FX={r:{},p:{},t:'',err:''};var CUR=['EUR','USD','GBP','RUB','SAR'];
+var CDN='https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@';
+function toTry(d){var o={};CUR.forEach(function(c){var k=c.toLowerCase();o[c]=d.try?(c==='EUR'?d.try:(d[k]?d.try/d[k]:null)):null});return o}
+async function fetchFx(){
+  try{var a=await (await fetch(CDN+'latest/v1/currencies/eur.min.json')).json();
+    var d30=new Date(Date.now()-30*864e5).toISOString().slice(0,10),b=null;
+    try{b=await (await fetch(CDN+d30+'/v1/currencies/eur.min.json')).json()}catch(x){}
+    FX.r=toTry(a.eur);FX.p=b&&b.eur?toTry(b.eur):{};FX.t=a.date||'';FX.err='';renderFx();checkAlarms();
+  }catch(e){FX.err=e.message;renderFx()}
+}
+function dlt(c){var r=FX.r[c],p=FX.p[c];return r&&p?(r-p)/p*100:null}
+function renderFx(){
+  if(!$('fx-cards'))return;
+  if(!FX.r.EUR){$('fx-cards').innerHTML='<div class="note warn">'+(FX.err?'Kur verisi alınamadı: '+esc(FX.err):'Yükleniyor…')+'</div>';renderAlarms();return}
+  $('fx-t').textContent='Veri tarihi: '+FX.t;
+  $('dash-fx').innerHTML=['EUR','USD','GBP','RUB'].map(function(c){var d=dlt(c);return '<span style="margin-right:12px"><b>'+c+'</b> '+(FX.r[c]?FX.r[c].toFixed(c==='RUB'?3:2):'–')+(d===null?'':' <small style="color:var(--'+(d>=0?'green':'red')+')">'+(d>=0?'▲':'▼')+Math.abs(d).toFixed(1)+'%</small>')+'</span>'}).join('');
+  $('fx-cards').innerHTML=CUR.map(function(c){var d=dlt(c);return '<div><b>'+(FX.r[c]?FX.r[c].toFixed(c==='RUB'?4:2):'–')+'</b><span>'+c+'/TRY'+(d===null?'':' · '+(d>=0?'+':'')+d.toFixed(2)+'% (30g)')+'</span></div>'}).join('');
+  var rk=DB.leads.filter(function(l){return l.cur&&l.cur!=='TRY'&&l.fxRate&&FX.r[l.cur]}).map(function(l){return{l:l,ch:(FX.r[l.cur]-l.fxRate)/l.fxRate*100}}).sort(function(a,b){return b.ch-a.ch});
+  $('fx-rank').innerHTML=rk.length?'<div class="tw"><table><tr><th>Lead</th><th>Döviz bütçesi</th><th>TL karşılığı (şimdi)</th><th>Ekleme kuru → şimdi</th><th>Değişim</th></tr>'+rk.map(function(x){var l=x.l;return '<tr><td>'+esc(l.name)+'</td><td>'+(l.fxBudget?l.fxBudget.toLocaleString('tr-TR')+' '+l.cur:'–')+'</td><td>'+(l.fxBudget?fmtTL(Math.round(l.fxBudget*FX.r[l.cur])):'–')+'</td><td>'+l.fxRate.toFixed(2)+' → '+FX.r[l.cur].toFixed(2)+'</td><td><b style="color:var(--'+(x.ch>=0?'green':'red')+')">'+(x.ch>=0?'+':'')+x.ch.toFixed(2)+'%</b></td></tr>'}).join('')+'</table></div>':'<div class="note">Dövizli lead yok. Lead eklerken "Müşteri dövizi" seçin; kayıt anındaki kur saklanır.</div>';
+  renderAlarms();
+}
+function saveAlarm(){var v=Number(val('a-val'));if(!v){toast('Hedef kur girin','e');return}DB.alarms.push({id:'A'+Date.now(),cur:val('a-cur'),dir:val('a-dir'),v:v,trig:false});save();renderAlarms();checkAlarms()}
+function renderAlarms(){if(!$('fx-al'))return;$('fx-al').innerHTML=DB.alarms.length?DB.alarms.map(function(a){return '<div class="note row"><span style="flex:1">'+a.cur+'/TRY '+(a.dir==='above'?'≥ ':'≤ ')+a.v.toFixed(2)+' ₺ · '+(a.trig?'✅ tetiklendi':'bekliyor')+'</span><button class="b s" style="margin:0;padding:3px 8px" onclick="delAlarm(\''+a.id+'\')">✕</button></div>'}).join(''):'<div class="note">Alarm yok.</div>'}
+function delAlarm(id){DB.alarms=DB.alarms.filter(function(a){return a.id!==id});save();renderAlarms()}
+function checkAlarms(){var h=false;DB.alarms.forEach(function(a){var r=FX.r[a.cur];if(!a.trig&&r&&((a.dir==='above'&&r>=a.v)||(a.dir==='below'&&r<=a.v))){a.trig=true;h=true;toast('Kur alarmı: '+a.cur+'/TRY '+r.toFixed(2),'k')}});if(h){save();renderAlarms()}}
+
+/* KAMPANYA */
+function fillCamp(){if($('l-camp'))$('l-camp').innerHTML='<option value="">— Yok —</option>'+DB.camps.map(function(c){return '<option value="'+c.id+'">'+esc(c.title)+'</option>'}).join('')}
+function saveCamp(){var t=val('c-t');if(!t){toast('Ad zorunlu','e');return}DB.camps.unshift({id:'C'+Date.now(),title:t,region:val('c-r'),budget:Number(val('c-b'))||0,end:val('c-e'),desc:val('c-d')});['c-t','c-r','c-b','c-e','c-d'].forEach(function(i){$(i).value=''});save();renderCamp()}
+function renderCamp(){$('camps').innerHTML=DB.camps.length?DB.camps.map(function(c){var n=DB.leads.filter(function(l){return l.camp===c.id}).length;return '<div class="note"><b>'+esc(c.title)+'</b> · '+esc(c.region||'–')+'<br>Lead: '+n+' · Bütçe: '+fmtTL(c.budget)+(c.end?' · Bitiş: '+esc(c.end):'')+(c.desc?'<br>'+esc(c.desc):'')+'<br><button class="b d" style="padding:3px 8px" onclick="delCamp(\''+c.id+'\')">Sil</button></div>'}).join(''):'<div class="note">Kampanya yok.</div>'}
+function delCamp(id){DB.camps=DB.camps.filter(function(c){return c.id!==id});save();renderCamp()}
+
+/* DEMO */
+var DEMO=[{id:'D1',name:'Demo Ayşe K.',phone:'+90 500 000 0001',email:'a@demo.test',budget:2500000,location:'Antalya Konyaaltı',propType:'Daire',purpose:'Oturum',status:'randevu'},{id:'D2',name:'Demo Mehmet D.',phone:'+90 500 000 0002',email:'m@demo.test',budget:4800000,location:'Antalya Lara',propType:'Villa',purpose:'Yatırım',status:'teklif'},{id:'D3',name:'Demo Zeynep A.',phone:'+90 500 000 0003',email:'',budget:1800000,location:'Bodrum',propType:'Yazlık',purpose:'Tatil',status:'iletisim'},{id:'D4',name:'Demo Ali Ç.',phone:'+90 500 000 0004',email:'al@demo.test',budget:7500000,location:'İstanbul Sarıyer',propType:'Villa',purpose:'Yatırım',status:'yeni'},{id:'D5',name:'Demo Fatma Y.',phone:'+90 500 000 0005',email:'',budget:3200000,location:'Antalya Kepez',propType:'Daire',purpose:'Kira geliri',status:'red'}];
+function renderDemo(){$('demo-n').textContent='Sistemde '+DB.leads.filter(function(l){return l.demo}).length+' demo kaydı var.'}
+function loadDemo(){DEMO.forEach(function(d){if(!DB.leads.some(function(l){return l.id===d.id})){var l=Object.assign({notes:'DEMO – sentetik veri',cur:'TRY',demo:true,createdAt:new Date().toISOString()},d);l.score=calcScore(l);DB.leads.push(l)}});save();toast('Demo yüklendi','k');renderDemo()}
+function clearDemo(){DB.leads=DB.leads.filter(function(l){return !l.demo});save();toast('Demo temizlendi');renderDemo()}
+fetchFx();
+
+/* SENTEZ: önceki CRM'den taşınan özellikler (yalnızca gerçek veriye dayalı) */
+function cnt(k){return DB.leads.filter(function(l){return l.status===k}).length}
+function renderFunnel(){
+  var m=Math.max.apply(null,Object.keys(STAT).map(cnt).concat([1]));
+  $('funnel').innerHTML=Object.keys(STAT).map(function(k){var n=cnt(k);return '<div class="row" style="margin:4px 0"><span style="width:90px">'+STAT[k]+'</span><div style="flex:1;background:var(--bg);border-radius:4px;height:8px"><div style="width:'+Math.round(n/m*100)+'%;background:var(--blue);height:8px;border-radius:4px"></div></div><b style="width:28px;text-align:right">'+n+'</b></div>'}).join('');
+}
+async function weeklyAI(){
+  var L=DB.leads;if(L.length<3){toast('Özet için en az 3 lead gerekli','e');return}
+  var d='Toplam lead: '+L.length+'\n'+Object.keys(STAT).map(function(k){return STAT[k]+': '+cnt(k)}).join('\n')+'\nOrtalama skor: '+Math.round(L.reduce(function(a,l){return a+(l.score||0)},0)/L.length)+'\nSkor 70+ lead: '+L.filter(function(l){return l.score>=70}).length+'\nBekleyen görev: '+DB.tasks.filter(function(t){return !t.done}).length;
+  try{$('weekly').innerHTML='<div class="out">'+esc(await groq('CRM verilerinden 3 kısa, uygulanabilir haftalık öneri yaz. Yalnızca verilen sayıları kullan; yeni sayı veya tahmin üretme. '+NOHALL,d))+'</div>'}catch(e){toast(e.message,'e')}
+}
+async function taskAI(){
+  var L=DB.leads.filter(function(l){return l.status!=='kapandi'&&l.status!=='red'&&(l.score||0)>=40}).sort(function(a,b){return b.score-a.score}).slice(0,6);
+  if(!L.length){toast('Skoru 40+ açık lead yok','e');return}
+  var d=L.map(function(l,i){return (i+1)+') '+l.name+' | skor '+l.score+' | '+STAT[l.status]+' | '+(l.location||'[girilmedi]')}).join('\n');
+  try{
+    var j=JSON.parse((await groq('Her lead için kısa bir takip görevi öner. SADECE JSON: {"tasks":[{"n":1,"title":"...","days":2}]}; n verilen numarayı göstermeli. '+NOHALL,d,true)).replace(/```json|```/g,'').trim());
+    $('task-ai').innerHTML=(j.tasks||[]).map(function(x){var l=L[(x.n||0)-1];return l?'<div class="note row"><span style="flex:1">'+esc(l.name+': '+x.title)+' ('+(Number(x.days)||'?')+' gün)</span><button class="b s" style="margin:0;padding:3px 8px" data-t="'+esc(l.name+' – '+x.title)+'" onclick="addTaskTxt(this.dataset.t)">Ekle</button></div>':''}).join('')||'<div class="note">Öneri üretilemedi.</div>';
+  }catch(e){toast('Görev önerisi alınamadı: '+e.message,'e',6000)}
+}
+function addTaskTxt(t){DB.tasks.unshift({id:'T'+Date.now(),title:t,done:false});save();renderDash();toast('Görev eklendi','k')}
+function poolList(){return DB.leads.filter(function(l){return l.status==='kapandi'||l.status==='red'})}
+function renderPool(){
+  var L=poolList();
+  $('pool').innerHTML=L.length?L.map(function(l){return '<div class="note row"><span style="flex:1"><b>'+esc(l.name)+'</b> · '+esc(l.location||'–')+' · '+fmtTL(l.budget)+' · '+STAT[l.status]+'</span><button class="b s" style="margin:0;padding:3px 8px" data-id="'+esc(l.id)+'" onclick="quickWA(this.dataset.id)">💬</button></div>'}).join(''):'<div class="note">Havuz boş.</div>';
+}
+async function poolAI(){
+  var L=poolList();if(!L.length){toast('Havuzda kayıt yok','e');return}
+  var d='Kayıt sayısı: '+L.length+'\n'+L.slice(0,15).map(function(l){return (l.location||'[girilmedi]')+' | '+(l.budget?fmtTL(l.budget):'[girilmedi]')+' | '+(l.purpose||'[girilmedi]')+' | '+STAT[l.status]}).join('\n');
+  try{$('pool-ai').innerHTML='<div class="out">'+esc(await groq('Kapanmış veya reddedilmiş müşterileri yeniden pazarlamak için kısa strateji yaz: segment, mesaj açısı, zamanlama. Yalnızca verilen kayıtları kullan; fiyat, kampanya veya indirim uydurma. '+NOHALL,d))+'</div>'}catch(e){toast(e.message,'e')}
+}
+var chart=null;
+async function drawChart(){
+  var c=$('fx-sel').value,ds=[],i;for(i=30;i>=0;i-=5)ds.push(new Date(Date.now()-i*864e5).toISOString().slice(0,10));
+  var r=await Promise.all(ds.map(function(d){return fetch(CDN+d+'/v1/currencies/eur.min.json').then(function(x){return x.json()}).then(function(j){return j.eur&&j.eur.try?{d:d,v:toTry(j.eur)[c]}:null}).catch(function(){return null})}));
+  r=r.filter(function(x){return x&&x.v});
+  if(r.length<2||typeof Chart==='undefined'){$('fx-ch-note').textContent='Geçmiş kur verisi veya Chart.js alınamadı; tahmini grafik çizilmez.';return}
+  if(chart)chart.destroy();
+  chart=new Chart($('fx-cv'),{type:'line',data:{labels:r.map(function(x){return x.d.slice(5)}),datasets:[{label:c+'/TRY',data:r.map(function(x){return x.v}),borderColor:'#2563eb',tension:.3}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+  var a=r[0].v,b=r[r.length-1].v;$('fx-ch-note').textContent=c+'/TRY '+a.toFixed(3)+' → '+b.toFixed(3)+' ('+((b-a)/a*100).toFixed(2)+'%), '+r.length+' veri noktası.';
+}
+function migrateOld(){
+  try{
+    if(localStorage.getItem(KEY)||DB.leads.length)return;
+    var o=JSON.parse(localStorage.getItem('proptech_crm_v2')||'null');if(!o||!o.leads)return;
+    DB.camps=(o.campaigns||[]).filter(function(c){return !/^DC/.test(c.id)}).map(function(c){return{id:String(c.id),title:c.title,region:c.region||'',budget:c.budget||0,end:c.endDate||'',desc:c.desc||''}});
+    DB.leads=o.leads.filter(function(l){return !/^D\d$/.test(l.id)}).map(function(l){var n={id:String(l.id),name:l.name,phone:l.phone||'',email:l.email||'',budget:l.budget||0,location:l.location||'',propType:l.propType||'',purpose:l.purpose||'',camp:l.campaignId||'',notes:l.notes||'',status:STAT[l.status]?l.status:'yeni',createdAt:l.createdAt||new Date().toISOString(),cur:l.currency||'TRY',fxBudget:l.fxBudget||0,fxRate:l.fxRateAtAdd||0};n.score=calcScore(n);return n});
+    DB.tasks=(o.tasks||[]).filter(function(t){return !/^DT/.test(t.id)}).map(function(t){return{id:String(t.id),title:t.title,done:!!t.done}});
+    try{DB.alarms=JSON.parse(localStorage.getItem('fxAlarms')||'[]').map(function(a){return{id:'A'+a.id,cur:a.cur,dir:a.dir,v:a.val,trig:!!a.triggered}})}catch(x){}
+    var q=o.settings||{};if(q.apiKey)DB.s.groqKey=q.apiKey;if(q.waToken)DB.s.waToken=q.waToken;if(q.waPhoneId)DB.s.waPhoneId=q.waPhoneId;
+    save();toast(DB.leads.length+' lead eski CRM\u2019den aktarıldı','k',7000);
+  }catch(e){}
+}
+var ICO={dash:'📊',leads:'🗂',wa:'💬',res:'🔎',fsbo:'🏚',emsal:'📐',fx:'💱',camp:'🎯',pool:'🌍',demo:'🧪',guide:'📖',set:'⚙️'};
+function buildNav(){
+  $('nav').innerHTML='<div class="ns">Modüller</div>'+PAGES.map(function(x){return (x[0]==='demo'?'<div class="ns">Sistem</div>':'')+'<button data-p="'+x[0]+'"><span>'+(ICO[x[0]]||'•')+'</span><em>'+x[1]+'</em><i class="nb" id="nb-'+x[0]+'"></i></button>'}).join('');
+  $('nav').onclick=function(e){var b=e.target.closest('button');if(b)go(b.dataset.p)};
+}
+function navBadges(){
+  var v={leads:DB.leads.filter(function(l){return l.status==='yeni'}).length,dash:DB.tasks.filter(function(t){return !t.done}).length,pool:DB.leads.filter(function(l){return l.status==='kapandi'||l.status==='red'}).length};
+  Object.keys(v).forEach(function(k){var e=$('nb-'+k);if(e){e.textContent=v[k];e.style.display=v[k]?'inline-block':'none'}});
+}
+/* EMSAL */
+var EM_MIN=5,EM_TIPS=['Daire','Villa','Residence','Yazlık','Arsa','Ticari'],emLast='';
+function nrm(s){return String(s||'').toLocaleLowerCase('tr').replace(/ı/g,'i').replace(/ş/g,'s').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o').replace(/ç/g,'c').replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim()}
+function hasW(t,k){return !!k&&(' '+nrm(t)+' ').indexOf(' '+k+' ')>-1}
+function pct(a,p){var i=(a.length-1)*p,l=Math.floor(i),h=Math.ceil(i);return a[l]+(a[h]-a[l])*(i-l)}
+function stat(arr){
+  var a=arr.filter(function(v){return isFinite(v)&&v>0}).sort(function(x,y){return x-y}),raw=a.length,cut=0;
+  if(raw>=8){var q1=pct(a,.25),q3=pct(a,.75),r=q3-q1,lo=q1-1.5*r,hi=q3+1.5*r;var b=a.filter(function(v){return v>=lo&&v<=hi});cut=raw-b.length;a=b}
+  var n=a.length;
+  return n>=EM_MIN?{ok:true,n:n,cut:cut,med:pct(a,.5),q1:pct(a,.25),q3:pct(a,.75)}:{ok:false,n:n,cut:cut};
+}
+function fm2(v){return Math.round(v).toLocaleString('tr-TR')+' ₺'}
+function emPool(mah,tip,days,skip){
+  var m=nrm(mah),P={ist:[],gerc:[],tips:{},undated:0,ages:[]};
+  function ok(d){var a=dayDiff(d);if(a===null){P.undated++;return true}if(days&&a>days)return false;P.ages.push(a);return true}
+  DB.emsal.forEach(function(e){
+    if(m&&nrm(e.mah)!==m)return;if(tip&&e.tip!==tip)return;if(!ok(e.d))return;
+    (e.kay==='islem'?P.gerc:P.ist).push({pm2:e.fy/e.m2,fy:e.fy});P.tips[e.tip]=1;
+  });
+  DB.fsbo.forEach(function(f){
+    if(f.id===skip||!f.m2||!f.p1)return;if(tip&&f.tip!==tip)return;if(m&&!hasW(f.loc,m))return;if(!ok(f.d1||f.d0))return;
+    P.ist.push({pm2:f.p1/f.m2,fy:f.p1});
+  });
+  return P;
+}
+function emsalMahOf(loc){var best='';DB.emsal.forEach(function(e){var k=nrm(e.mah);if(k&&hasW(loc,k)&&k.length>nrm(best).length)best=e.mah});return best}
+function emsalBadge(f){
+  if(!f.m2||!f.p1)return '';
+  var mah=emsalMahOf(f.loc);if(!mah)return '';
+  var s=stat(emPool(mah,f.tip||'',90,f.id).ist.map(function(r){return r.pm2}));
+  if(!s.ok)return '<div style="font-size:12px;color:var(--tx3)">📐 Emsal: '+esc(mah)+' için yetersiz veri (n='+s.n+')</div>';
+  var d=(f.p1/f.m2-s.med)/s.med*100;
+  return '<div style="font-size:12px;color:var(--tx2)">📐 Emsal medyanına göre '+(d>=0?'+':'')+d.toFixed(1).replace('.',',')+'% ('+esc(mah)+', n='+s.n+(f.tip?', '+esc(f.tip):', tip karışık olabilir')+')</div>';
+}
+function emAnalyze(){
+  var mah=$('em-fm').value,tip=$('em-ft').value,days=Number($('em-fd').value)||0,m=nrm(mah);
+  var P=emPool(mah,tip,days),I=stat(P.ist.map(function(r){return r.pm2})),G=stat(P.gerc.map(function(r){return r.pm2}));
+  var h='',L=[];
+  function tile(v,l){return '<div><b>'+v+'</b><span>'+l+'</span></div>'}
+  function grp(t,x){return '<h3 style="margin:12px 0 4px;font-size:14px">'+t+'</h3>'+x}
+  function nt(x,w){return '<div class="note'+(w?' warn':'')+'">'+x+'</div>'}
+  function band(s,lbl,key){
+    if(!s.ok)return nt(lbl+': yetersiz veri (n='+s.n+', en az '+EM_MIN+')',1);
+    L.push(lbl+' ₺/m² medyan: '+fm2(s.med)+' (Q1 '+fm2(s.q1)+', Q3 '+fm2(s.q3)+', n='+s.n+')');
+    return '<div class="st em">'+tile(fm2(s.med),lbl+' ₺/m² medyan')+tile(fm2(s.q1)+' – '+fm2(s.q3),'Q1–Q3 bandı')+tile(s.n,'Kayıt (n)')+'</div>'+(s.cut?nt(s.cut+' uç değer ayıklandı'):'');
+  }
+  h+=grp('İstenen fiyat (ilan / FSBO)',band(I,'İstenen'));
+  h+=grp('Gerçekleşen bedel (işlem)',band(G,'Gerçekleşen'));
+  if(I.ok&&G.ok){var df=(I.med-G.med)/I.med*100;L.push('İstenen→gerçekleşen ₺/m² farkı: %'+df.toFixed(1));h+='<div class="st em">'+tile('%'+df.toFixed(1).replace('.',','),'İstenen → gerçekleşen fark')+'</div>'}
+  /* FSBO pazarlık */
+  var fs=DB.fsbo.filter(function(f){var a=dayDiff(f.d1||f.d0);return (!tip||f.tip===tip)&&(!m||hasW(f.loc,m))&&(!days||a===null||a<=days)});
+  var pp=fs.filter(function(f){return f.p0>0&&f.p1>0}),pz='';
+  if(pp.length<EM_MIN)pz=nt('Pazarlık verisi: yetersiz (n='+pp.length+', en az '+EM_MIN+')',1);
+  else{
+    var dr=pp.filter(function(f){return f.p1<f.p0}),rate=Math.round(dr.length/pp.length*100);
+    pz='<div class="st em">'+tile('%'+rate,'Fiyat düşüren ilan (n='+pp.length+')');
+    L.push('Fiyat düşüren FSBO ilan oranı: %'+rate+' (n='+pp.length+')');
+    if(dr.length>=EM_MIN){var md=pct(dr.map(function(f){return (f.p0-f.p1)/f.p0*100}).sort(function(x,y){return x-y}),.5);pz+=tile('%'+md.toFixed(1).replace('.',','),'Düşenlerde medyan düşüş (n='+dr.length+')');L.push('Fiyat düşenlerde medyan düşüş: %'+md.toFixed(1))}
+    var ag=fs.map(function(f){return dayDiff(f.d0)}).filter(function(a){return a!==null&&a>=0}).sort(function(x,y){return x-y});
+    if(ag.length>=EM_MIN){pz+=tile(Math.round(pct(ag,.5))+' gün','Medyan ilan yaşı (n='+ag.length+')');L.push('Medyan ilan yaşı: '+Math.round(pct(ag,.5))+' gün (n='+ag.length+')')}
+    pz+='</div>';
+  }
+  h+=grp('Pazarlık (kayıtlı FSBO ilanlar)',pz);
+  /* arz-talep */
+  var bud=DB.leads.filter(function(l){var a=dayDiff(l.createdAt);return l.budget>0&&(!m||hasW(l.location,m))&&(!tip||l.propType===tip)&&(!days||a===null||a<=days)}).map(function(l){return Number(l.budget)});
+  var S=stat(bud),A=stat(P.ist.map(function(r){return r.fy})),at='';
+  if(S.ok&&A.ok){var rt=Math.round(S.med/A.med*100);at='<div class="st em">'+tile(fmtTL(Math.round(S.med)),'Alıcı bütçe medyanı (n='+S.n+')')+tile(fmtTL(Math.round(A.med)),'İlan fiyat medyanı (n='+A.n+')')+tile('%'+rt,'Bütçe / ilan fiyatı')+'</div>';L.push('Alıcı bütçe medyanı: '+fmtTL(Math.round(S.med))+' (n='+S.n+'); ilan fiyat medyanı: '+fmtTL(Math.round(A.med))+' (n='+A.n+'); bütçe/ilan: %'+rt)}
+  else at=nt('Arz–talep: yetersiz veri (bütçe n='+S.n+', ilan n='+A.n+', en az '+EM_MIN+')',1);
+  h+=grp('Arz – talep',at);
+  var ag2=P.ages.length?'en yeni '+Math.min.apply(null,P.ages)+' gün, en eski '+Math.max.apply(null,P.ages)+' gün':'tarihli kayıt yok';
+  h+=nt('Veri tazeliği: '+ag2+(P.undated?' · tarihsiz '+P.undated:''));
+  $('em-out').innerHTML=h;
+  emLast=(I.ok||G.ok||L.length)?'Bölge: '+(mah||'tüm bölge')+' · Tip: '+(tip||'tümü')+' · Dönem: '+(days?'son '+days+' gün':'tümü')+'\n'+L.join('\n'):'';
+  $('em-ai-b').disabled=!L.length;$('em-ai').innerHTML='';
+}
+async function emAI(){
+  if(!emLast){toast('Yorumlanacak hesap yok','e');return}
+  var b=$('em-ai-b');b.disabled=true;$('em-ai').innerHTML='<div class="note">Yorumlanıyor…</div>';
+  try{
+    var t=await groq('Aşağıdaki hesaplanmış medyan verilerini 3-4 cümleyle yorumla. Yeni rakam üretme, tahmin veya fiyat önerisi verme. İstenen fiyat (ilan) ile gerçekleşen bedeli (işlem) karıştırma. Düşük kayıt sayısı varsa belirt. '+NOHALL,emLast);
+    $('em-ai').innerHTML='<div class="out">'+esc(t)+'</div>';
+  }catch(e){$('em-ai').innerHTML='<div class="note warn">'+esc(e.message)+'</div>'}
+  b.disabled=false;
+}
+function emNum(x){if(typeof x==='number')return isFinite(x)?x:0;var d=String(x||'').replace(/\D/g,'');return d?Number(d):0}
+async function emFill(){
+  var t=val('em-paste');if(!t){toast('İlan metnini yapıştırın','e');return}
+  t=t.replace(/(\+?90|0)?\s*\(?5\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{2}[\s.-]?\d{2}/g,' ').slice(0,4000);
+  var b=$('em-fillbtn');b.disabled=true;
+  try{
+    var o=await groq('İlan metninden alanları çıkar. Yalnızca JSON döndür: {"mah":string|null,"tip":"Daire"|"Villa"|"Residence"|"Yazlık"|"Arsa"|"Ticari"|null,"m2":number|null,"fy":number|null}. mah mahalle veya semt adıdır. m2 için brüt/net ayrımı varsa net m² değerini yaz. fy toplam fiyattır, TL değilse null yaz. Metinde olmayan değer için null yaz, tahmin etme. '+NOHALL,t,true);
+    var j=JSON.parse(o.replace(/```json|```/g,'').trim());
+    if(j.mah)$('em-mah').value=String(j.mah).trim();
+    if(EM_TIPS.indexOf(j.tip)>-1)$('em-tip').value=j.tip;
+    if(emNum(j.m2))$('em-m2').value=emNum(j.m2);
+    if(emNum(j.fy))$('em-fy').value=emNum(j.fy);
+    toast('Alanlar dolduruldu, kontrol edip kaydedin','k');
+  }catch(e){toast('Alanlar çıkarılamadı: '+e.message,'e',6000)}
+  b.disabled=false;
+}
+function emSave(){
+  var e={id:'E'+Date.now(),mah:val('em-mah'),tip:val('em-tip'),m2:Number(val('em-m2'))||0,fy:Number(val('em-fy'))||0,kay:val('em-kay'),d:val('em-d')};
+  if(!e.mah){toast('Mahalle zorunlu','e');return}
+  if(e.m2<=0||e.fy<=0){toast('m² ve fiyat zorunlu','e');return}
+  var pm=e.fy/e.m2;
+  if((pm<1000||pm>1e6)&&!confirm('₺/m² değeri alışılmadık ('+fm2(pm)+'). Yine de kaydedilsin mi?'))return;
+  DB.emsal.unshift(e);save();
+  ['em-paste','em-mah','em-m2','em-fy'].forEach(function(i){$(i).value=''});
+  renderEmsal();toast('Emsal kaydedildi','k');
+}
+function emDel(id){if(!confirm('Emsal kaydı silinsin mi?'))return;DB.emsal=DB.emsal.filter(function(x){return x.id!==id});save();renderEmsal()}
+function renderEmsal(){
+  var seen={},ms=[];DB.emsal.forEach(function(e){var k=nrm(e.mah);if(k&&!seen[k]){seen[k]=1;ms.push(e.mah)}});
+  ms.sort(function(a,b){return a.localeCompare(b,'tr')});
+  var cur=$('em-fm').value;
+  $('em-fm').innerHTML='<option value="">Tüm bölge</option>'+ms.map(function(m){return '<option value="'+esc(m)+'">'+esc(m)+'</option>'}).join('');
+  if(ms.indexOf(cur)>-1)$('em-fm').value=cur;
+  $('em-mlist').innerHTML=ms.map(function(m){return '<option value="'+esc(m)+'">'}).join('');
+  if(!$('em-d').value)$('em-d').value=new Date().toISOString().slice(0,10);
+  var list=DB.emsal.slice().sort(function(a,b){return String(b.d||'').localeCompare(String(a.d||''))}).slice(0,100);
+  $('em-list').innerHTML=list.length?list.map(function(e){return '<tr><td>'+esc(e.mah)+'</td><td>'+esc(e.tip)+'</td><td>'+e.m2+'</td><td>'+fmtTL(e.fy)+'</td><td>'+fm2(e.fy/e.m2)+'</td><td>'+(e.kay==='islem'?'İşlem':'İlan')+'</td><td>'+esc(e.d||'–')+'</td><td><button class="b d" data-id="'+esc(e.id)+'" style="margin:0;padding:4px 8px" onclick="emDel(this.dataset.id)">🗑</button></td></tr>'}).join(''):'<tr><td colspan="8" style="text-align:center;color:var(--tx3)">Kayıt yok</td></tr>';
+  emAnalyze();
+}
+
+/* BUGÜN + EŞLEŞME */
+function isOwnerLead(l){return /^FSBO kaynak/.test(l.notes||'')}
+function matchFor(l){
+  var toks=nrm(l.location).split(' ').filter(function(t){return t.length>=4&&['antalya','mahallesi','mahalle','merkez'].indexOf(t)<0});
+  if(!toks.length)return [];
+  var b=Number(l.budget)||0,R=[];
+  DB.fsbo.forEach(function(f){
+    if(!f.p1)return;
+    if(!toks.some(function(t){return hasW(f.loc,t)}))return;
+    if(l.propType&&f.tip&&l.propType!==f.tip)return;
+    if(b>0&&(f.p1>b*1.1||f.p1<b*.6))return;
+    var pt=40;
+    if(b>0)pt+=Math.max(0,Math.round(30*(1-Math.abs(f.p1-b)/b)));
+    if(l.propType&&f.tip)pt+=20;
+    pt+=fatigue(f).p;
+    R.push({f:f,pt:pt});
+  });
+  R.sort(function(x,y){return y.pt-x.pt});
+  return R.slice(0,3);
+}
+function renderToday(){
+  var rows=[],names={};
+  DB.leads.forEach(function(l){names[l.name]=1});
+  DB.leads.forEach(function(l){
+    if(l.status==='kapandi'||l.status==='red')return;
+    var g=dayDiff(l.createdAt),n=isOwnerLead(l)?0:matchFor(l).length,pt=l.score||0,why=['skor '+(l.score||0)];
+    if(l.status==='yeni'){var w=Math.min(Math.max(g||0,0),14);pt+=w*2;why.push((g||0)+' gündür bekliyor')}
+    else why.push(STAT[l.status]);
+    if(l.status==='randevu'||l.status==='teklif')pt+=15;
+    if(n){pt+=10;why.push(n+' ilan uyuyor')}
+    rows.push({t:'Lead',id:l.id,name:l.name,pt:pt,why:why.join(', ')});
+  });
+  DB.fsbo.forEach(function(f){
+    if(names['Mal sahibi – '+(f.loc||'')+(f.no?' #'+f.no:'')])return;
+    var x=fatigue(f);if(x.p<5)return;
+    rows.push({t:'FSBO',id:f.id,name:(f.loc||'Konum girilmedi')+(f.no?' · #'+f.no:''),pt:x.p*10,why:x.why});
+  });
+  rows.sort(function(a,b){return b.pt-a.pt});
+  $('today').innerHTML=rows.length?rows.slice(0,8).map(function(r){
+    return '<div class="row" style="padding:6px 0;border-bottom:1px solid var(--bd)"><span class="sc '+(r.t==='Lead'?'mi':'lo')+'">'+r.t+'</span><div style="flex:1;min-width:140px"><b>'+esc(r.name)+'</b><div style="font-size:12px;color:var(--tx2)">'+esc(r.why)+'</div></div>'+sc(Math.round(r.pt))+
+      (r.t==='Lead'?'<button class="b s" data-id="'+esc(r.id)+'" style="margin:0;padding:4px 8px" onclick="quickWA(this.dataset.id)">💬</button>':'<button class="b s" style="margin:0;padding:4px 8px" onclick="go(\'fsbo\')">İlanlar</button>')+'</div>';
+  }).join(''):'<div class="note">Açık lead veya yorgunluk puanı 5 ve üstü FSBO ilanı yok.</div>';
+  renderMatches();
+}
+function renderMatches(){
+  var rows=[];
+  DB.leads.forEach(function(l){if(l.status==='kapandi'||l.status==='red'||isOwnerLead(l))return;var m=matchFor(l);if(m.length)rows.push({l:l,m:m})});
+  rows.sort(function(a,b){return (b.l.score||0)-(a.l.score||0)});
+  $('matches').innerHTML=rows.length?rows.slice(0,8).map(function(r){
+    var l=r.l;
+    return '<div class="note"><div class="row"><b style="flex:1">'+esc(l.name)+'</b>'+sc(l.score||0)+'</div><div style="font-size:12px;color:var(--tx2)">'+esc(l.location||'')+(l.propType?' · '+esc(l.propType):'')+(l.budget?' · '+fmtTL(l.budget):'')+'</div>'+
+      r.m.map(function(x){var f=x.f;return '<div style="margin-top:6px">'+esc(f.loc||'Konum girilmedi')+(f.tip?' · '+esc(f.tip):' · tip belirsiz')+' · '+fmtTL(f.p1)+(f.m2?' · '+f.m2+' m²':'')+(f.url?' · <a href="'+esc(f.url)+'" target="_blank" rel="noopener">ilan</a>':'')+emsalBadge(f)+'</div>'}).join('')+
+      '<button class="b s" data-id="'+esc(l.id)+'" style="padding:4px 10px" onclick="matchWA(this.dataset.id)">💬 WhatsApp için bağlam doldur</button></div>';
+  }).join(''):'<div class="note">Eşleşen alıcı–ilan çifti yok. Lead\'lerde lokasyon (mahalle) ve FSBO ilanlarda konum dolu olmalı.</div>';
+}
+function matchWA(id){
+  var l=DB.leads.find(function(x){return x.id===id});if(!l)return;
+  var m=matchFor(l);if(!m.length){toast('Eşleşen ilan yok','e');return}
+  quickWA(id);
+  $('w-ctx').value='Alıcının aradığı bölgede uygun ilanlar: '+m.map(function(x){return (x.f.loc||'konum yok')+(x.f.tip?' '+x.f.tip:'')+(x.f.m2?', '+x.f.m2+' m²':'')+', '+fmtTL(x.f.p1)}).join('; ');
+  toast('Ek bağlam dolduruldu, mesajı üretmeden önce kontrol edin','k',5000);
+}
+
+/* INIT */
+load();migrateOld();
+buildNav();
+$('l-filter').innerHTML+=Object.keys(STAT).map(function(k){return '<option value="'+k+'">'+STAT[k]+'</option>'}).join('');
+go('dash');
+/* PWA */
+var deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferredPrompt=e;$('inst').style.display=''});
+window.addEventListener('appinstalled',function(){deferredPrompt=null;$('inst').style.display='none';toast('Uygulama yüklendi','k')});
+function installApp(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(function(){deferredPrompt=null;$('inst').style.display='none'})}
+if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js').catch(function(){});
+</script>
+</body>
+</html>
